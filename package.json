@@ -1,0 +1,15 @@
+{
+  "name": "campusconnect",
+  "version": "1.0.0",
+  "description": "CampusConnect — Smart Campus Lost & Found Platform",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend && node src/server.js",
+    "backend:dev": "cd backend && node node_modules/nodemon/bin/nodemon.js src/server.js",
+    "frontend:dev": "cd frontend && node node_modules/vite/bin/vite.js",
+    "frontend:build": "cd frontend && node node_modules/vite/bin/vite.js build"
+  },
+  "keywords": ["lost-and-found", "campus", "mern"],
+  "author": "",
+  "license": "MIT"
+}
