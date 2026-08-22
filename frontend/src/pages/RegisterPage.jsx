@@ -38,7 +38,12 @@ function RegisterPage() {
       login(data.token, data.user);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      // Show specific backend message, or network error details for debugging
+      const msg = err.response?.data?.message
+        || (err.code === 'ERR_NETWORK' ? 'Cannot reach server. Check your connection.' : null)
+        || err.message
+        || 'Registration failed. Please try again.';
+      setError(msg);
     } finally {
       setIsLoading(false);
     }
