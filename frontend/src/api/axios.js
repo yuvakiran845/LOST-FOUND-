@@ -11,7 +11,7 @@ import axios from 'axios';
  *   const { data } = await api.get('/items');
  */
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },

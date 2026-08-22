@@ -20,9 +20,10 @@ const app = express();
 
 // ─── Middleware ────────────────────────────────────────────────────────────
 
-// Allow requests from React dev server (Vite may rotate ports)
+// Allow requests from React dev server and all deployed frontend origins
+// CLIENT_URL can be comma-separated for multiple origins e.g. "https://a.vercel.app,https://b.vercel.app"
 const ALLOWED_ORIGINS = [
-  process.env.CLIENT_URL,
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(u => u.trim()) : []),
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
@@ -32,8 +33,12 @@ const ALLOWED_ORIGINS = [
 app.use(
   cors({
     origin: (origin, cb) => {
-      // Allow requests with no origin (curl, mobile apps)
-      if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      // Allow requests with no origin (curl, mobile apps, Render health checks)
+      if (!origin) return cb(null, true);
+      // Allow exact matches
+      if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      // Allow all Vercel preview deployments for this project
+      if (origin.endsWith('.vercel.app')) return cb(null, true);
       cb(new Error(`CORS blocked: ${origin}`));
     },
     credentials: true,
